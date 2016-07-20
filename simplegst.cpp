@@ -5,9 +5,9 @@
 #include <QTimer>
 #include <QWidget>
 
+// No need for these to be global. I was lazy.
 WId m_xwinid;
 GstElement *m_pipeline;
-GstElement *m_sink;
 
 // If we ever want to handle messages
 static gboolean HandleMessage(GstBus *bus, GstMessage *msg, gpointer data)
@@ -61,7 +61,6 @@ int main(int argc, char *argv[])
 
     m_pipeline = gst_element_factory_make("playbin2", NULL);
     g_object_set(m_pipeline, "uri", "http://docs.gstreamer.com/media/sintel_cropped_multilingual.webm", NULL);
-    m_sink = gst_element_factory_make("xvimagesink", NULL);
 
     QWidget window;
     window.resize(640, 480);
@@ -70,9 +69,9 @@ int main(int argc, char *argv[])
 
     gst_x_overlay_set_window_handle(GST_X_OVERLAY(m_pipeline), m_xwinid);
 
-    GstStateChangeReturn sret = gst_element_set_state(m_pipeline,
-        GST_STATE_PLAYING);
-    if (sret == GST_STATE_CHANGE_FAILURE) {
+    GstStateChangeReturn sret = gst_element_set_state(m_pipeline, GST_STATE_PLAYING);
+    if (sret == GST_STATE_CHANGE_FAILURE)
+    {
         gst_element_set_state(m_pipeline, GST_STATE_NULL);
         gst_object_unref(m_pipeline);
         // Exit application
