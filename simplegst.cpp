@@ -1,5 +1,3 @@
-#include <Windows.h>
-
 #include <gst\gst.h>
 #include <gst\interfaces\xoverlay.h>
 
@@ -51,8 +49,6 @@ static gboolean HandleMessage(GstBus *bus, GstMessage *msg, gpointer data)
     }
     return TRUE;
 }
-
-using namespace std;
 
 int main(int argc, char *argv[])
 {
