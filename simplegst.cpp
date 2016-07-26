@@ -1,3 +1,5 @@
+#include <Windows.h>
+
 #include <gst\gst.h>
 #include <gst\interfaces\xoverlay.h>
 
@@ -50,17 +52,23 @@ static gboolean HandleMessage(GstBus *bus, GstMessage *msg, gpointer data)
     return TRUE;
 }
 
+using namespace std;
+
 int main(int argc, char *argv[])
 {
     if (!g_thread_supported())
         g_thread_init(NULL);
+
+    if (argc != 2) {
+        return 2;
+    }
 
     gst_init(&argc, &argv);
     QApplication app(argc, argv);
     app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
 
     m_pipeline = gst_element_factory_make("playbin2", NULL);
-    g_object_set(m_pipeline, "uri", "http://docs.gstreamer.com/media/sintel_cropped_multilingual.webm", NULL);
+    g_object_set(m_pipeline, "uri", argv[1], NULL);
 
     QWidget window;
     window.resize(640, 480);
